@@ -1,5 +1,6 @@
 package com.aginternacional.gestionreclamos.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -21,6 +22,7 @@ import java.util.Properties;
 @EnableJpaRepositories
 public class PersistenceJPAConfig {
 
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -41,7 +43,7 @@ public class PersistenceJPAConfig {
         dataSource.setUrl("jdbc:postgresql://localhost:5433/reclamos");
         dataSource.setUsername("postgres");
         dataSource.setPassword("axiom61");
-        dataSource.setSchema("public");
+        //dataSource.setSchema("public");
 
         return dataSource;
     }
@@ -60,7 +62,7 @@ public class PersistenceJPAConfig {
     }
 
     Properties additionalProperties() {
-        Properties properties = new Properties();
+       /* Properties properties = new Properties();
         properties.setProperty("spring.jpa.database-platform", "org.hibernate.dialect.PostgreSQLDialect");
        // properties.setProperty("spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults", "false");
         properties.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");
@@ -71,7 +73,13 @@ public class PersistenceJPAConfig {
         properties.setProperty("spring.jpa.hibernate.ddl-auto", "create");
         properties.setProperty("spring.jpa.generate-ddl", "true");
         //spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL9Dialect
-        //properties.setProperty("spring.freemarker.check-template-location")
+        //properties.setProperty("spring.freemarker.check-template-location")*/
+        Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        properties.setProperty("hibernate.jdbc.lob.non_contextual_creation", "true");
         return properties;
     }
 }

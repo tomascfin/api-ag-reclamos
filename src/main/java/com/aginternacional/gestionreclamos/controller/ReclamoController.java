@@ -27,10 +27,10 @@ public class ReclamoController {
 
 
     @GetMapping("/reclamos")
-    public ResponseEntity<List<Reclamo>> obtenerReclamos(){
+    public void obtenerReclamos(){
         List<Reclamo> reclamos = reclamoService.obtenerReclamos();
         System.out.println("reclamos size: "+reclamos.size());
-        return new ResponseEntity<>(reclamos, null, HttpStatus.OK);
+       // return new ResponseEntity<>(reclamos, null, HttpStatus.OK);
     }
 
     @PostMapping("/insertarReclamo")

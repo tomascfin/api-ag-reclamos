@@ -3,6 +3,7 @@ package com.aginternacional.gestionreclamos.domain;
 import com.aginternacional.gestionreclamos.config.Constants;
 import com.aginternacional.gestionreclamos.pojo.AbstractAuditingEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -18,6 +19,8 @@ import java.util.Set;
 import java.time.ZonedDateTime;
 
 @Entity
+@Table(name = "users")
+@Data
 //@Cache(usage = CacheConcurrencyStrategy.NONE.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity {
 
@@ -25,8 +28,8 @@ public class User extends AbstractAuditingEntity {
 
     @Id
     @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGeneratorUser")
+    @SequenceGenerator(name = "sequenceGeneratorUser")
     private Long id;
 
     @NotNull
@@ -48,39 +51,4 @@ public class User extends AbstractAuditingEntity {
     private String role;
 
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }
