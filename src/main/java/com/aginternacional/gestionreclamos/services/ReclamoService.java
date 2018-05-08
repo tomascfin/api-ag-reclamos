@@ -5,7 +5,7 @@ import com.aginternacional.gestionreclamos.repository.ReclamoRepository;
 import com.aginternacional.gestionreclamos.services.dto.ReclamoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.BeanUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +28,13 @@ public class ReclamoService {
         return reclamos;
     }
 
-    public ReclamoDTO insertarReclamo(ReclamoDTO reclamoDTO){
+    public ReclamoDTO insertarReclamoDt(ReclamoDTO reclamoDTO){
+        Reclamo reclamo = null;
 
-        Reclamo reclamo = new Reclamo();
+        BeanUtils.copyProperties(reclamoDTO, reclamo);
+        reclamoRepository.save(reclamo);
+        reclamoDTO.setId(reclamo.getId());
 
-
-
-
-
-        //reclamoRepository.save(reclamoDTO)
-
-        return null;
+        return reclamoDTO;
     }
 }

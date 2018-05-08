@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReclamoRepository extends CrudRepository<Reclamo, Integer>{
 
+
+
 }

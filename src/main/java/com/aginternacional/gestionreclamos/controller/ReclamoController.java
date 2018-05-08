@@ -5,6 +5,7 @@ import com.aginternacional.gestionreclamos.domain.Roles;
 import com.aginternacional.gestionreclamos.services.ReclamoService;
 import com.aginternacional.gestionreclamos.services.RolesService;
 import com.aginternacional.gestionreclamos.services.dto.ReclamoDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.ws.rs.POST;
 import java.util.List;
 
 @RestController
@@ -52,10 +54,9 @@ public class ReclamoController {
     })
     @ApiOperation(value = "Inserta un reclamo", response = ReclamoDTO.class)
     public ResponseEntity<ReclamoDTO> insertarReclamo(ReclamoDTO reclamoDTO){
-        ReclamoDTO reclamoDTO1 = new ReclamoDTO();
+        ReclamoDTO reclamo = reclamoService.insertarReclamoDt(reclamoDTO);
 
-
-        return ResponseEntity.accepted().body(reclamoDTO1);
+        return new ResponseEntity<>(reclamo, null, HttpStatus.OK);
     }
 
     @GetMapping("/roles")
@@ -64,4 +65,6 @@ public class ReclamoController {
         System.out.println("reclamos size: "+roles.size());
         return new ResponseEntity<>(roles, null, HttpStatus.OK);
     }
+
+
 }

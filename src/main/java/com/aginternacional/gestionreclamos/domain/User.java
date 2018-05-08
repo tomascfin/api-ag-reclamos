@@ -44,8 +44,6 @@ public class User extends AbstractAuditingEntity {
     @Column(name = "password_hash",length = 60)
     private String password;
 
-
-
     @NotNull
     @Column(nullable = false)
     private String role;
