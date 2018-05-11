@@ -40,10 +40,10 @@ public class PersistenceJPAConfig {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5433/reclamos");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("axiom61");
-        //dataSource.setSchema("public");
+        dataSource.setUrl("jdbc:postgresql://pellefant.db.elephantsql.com:5432/hqqlcmvr");
+        dataSource.setUsername("hqqlcmvr");
+        dataSource.setPassword("PHFJSDfFmIiQY_6QdiQ-EUetzuxypnE7");
+        dataSource.setSchema("reclamos");
 
         return dataSource;
     }
