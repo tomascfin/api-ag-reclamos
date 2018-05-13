@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpHeaders;
@@ -39,10 +41,19 @@ public class ReclamoController {
 
 
     @GetMapping("/reclamos")
-    public void obtenerReclamos(){
+    public JSONObject obtenerReclamos(){
         List<Reclamo> reclamos = reclamoService.obtenerReclamos();
         System.out.println("reclamos size: "+reclamos.size());
        // return new ResponseEntity<>(reclamos, null, HttpStatus.OK);
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("test", "ok");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
     }
 
     @PostMapping("/insertarReclamo")
