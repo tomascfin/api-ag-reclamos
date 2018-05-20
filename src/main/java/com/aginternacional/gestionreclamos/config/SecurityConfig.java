@@ -1,70 +1,70 @@
 package com.aginternacional.gestionreclamos.config;
+
 import com.aginternacional.gestionreclamos.security.jwt.JwtAuthenticationEntryPoint;
+import com.aginternacional.gestionreclamos.security.jwt.JwtAuthenticationProvider;
+import com.aginternacional.gestionreclamos.security.jwt.JwtAuthenticationTokenFilter;
+import com.aginternacional.gestionreclamos.security.jwt.JwtSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import   org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.annotation.Resource;
+import javax.annotation.PostConstruct;
+import java.util.Collections;
 
-@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@ComponentScan("com.aginternacional.gestionreclamos")
+@Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Resource(name = "userService")
-    private UserDetailsService userDetailsService;
-
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private JwtAuthenticationProvider authenticationProvider;
+    @Autowired
+    private JwtAuthenticationEntryPoint entryPoint;
 
-    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-
-    @Autowired
-    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(encoder());
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
 
     @Bean
-    public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationFilter();
+    public JwtAuthenticationTokenFilter authenticationTokenFilter() {
+        JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
+        return filter;
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().
-                authorizeRequests()
-                .antMatchers("/token/*").permitAll()
-                .anyRequest().authenticated()
+
+
+
+        http.csrf().disable()
+                .authorizeRequests().antMatchers("**/rest/**").authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .exceptionHandling().authenticationEntryPoint(entryPoint)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.headers().cacheControl();
+
+        JwtAuthenticationTokenFilter authenticationTokenFilter = new JwtAuthenticationTokenFilter();
+
+
+
+
+
     }
 
-    @Bean
-    public BCryptPasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
-    }
 }
