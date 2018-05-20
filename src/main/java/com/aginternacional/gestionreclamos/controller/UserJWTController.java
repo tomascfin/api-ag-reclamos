@@ -33,7 +33,7 @@ public class UserJWTController {
 
     private final TokenProvider tokenProvider;
 
-    @Autowired
+
     private final AuthenticationManager authenticationManager;
 
     public UserJWTController( TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
@@ -52,6 +52,7 @@ public class UserJWTController {
         System.out.println("authenticationToken : "+ authenticationToken.toString());
 
         try {
+            System.out.println("entra a try catch");
             Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
             System.out.println("2");
             SecurityContextHolder.getContext().setAuthentication(authentication);
